@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"<Unnamed>","l":"Identitas"},{"p":"<Unnamed>","l":"Node"},{"p":"<Unnamed>","l":"Penilaian"},{"p":"<Unnamed>","l":"TidakDiimplementasiException"},{"p":"<Unnamed>","l":"TugasKedua"},{"p":"<Unnamed>","l":"TugasKeduaINF218"}]
