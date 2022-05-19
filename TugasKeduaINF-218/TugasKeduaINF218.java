@@ -40,15 +40,15 @@ public class TugasKeduaINF218{
  *********************************************************************************************/   
    public String [] displayList(TugasKeduaINF218 tl)
    {
-      String [] ss = new String[size];
+      String [] node = new String[size];
       int i=0;
       Node cur = tl.first;       // dimulai dari node pertama
       while(cur != null) {       // periksa apakah node sekarang null
-         ss[i]= cur.display();   // insert node ke array
+         node[i]= cur.display();   // insert node ke array
          cur = cur.link;         // berpindah ke link selanjutnya
          i++;
       }
-      return ss;                 // me-return array node di linked list
+      return node;                 // me-return array node di linked list
    }
   
 /**
@@ -61,7 +61,10 @@ public class TugasKeduaINF218{
  * @param ipk : item data ipk yang diberikan.
  *********************************************************************************************/       
    public void insertFirst(int id, String nama, double ipk){
-      throw new TidakDiimplementasiException("Method insertFirst belum diimplementasikan"); 
+         Node n = new Node(id, nama, ipk, first);
+         first = n;
+         if(last == null) last = n;
+         size++; 
    }
    
 /**
@@ -74,7 +77,11 @@ public class TugasKeduaINF218{
  * @param ipk : item data ipk yang diberikan.
  *********************************************************************************************/
    public void insertLast(int id, String nama, double ipk){
-      throw new TidakDiimplementasiException("Method insertLast belum diimplementasikan"); 
+      Node n = new Node(id, nama, ipk, null);
+      if(first == null) first = n;
+      else last.link = n;
+      last = n;
+      size++;  
    }
 
 /**
@@ -91,7 +98,17 @@ public class TugasKeduaINF218{
  *********************************************************************************************/
  
    public void insertAtPos(int id, String nama, double ipk,int pos) {
-      throw new TidakDiimplementasiException("Method insertAtPos belum diimplementasikan");    
+      if(pos < 0 || pos > size) throw new IndexOutOfBoundsException("Index out of bounds");
+      if(pos == 0) insertFirst(id, nama, ipk);
+      else if(pos == size) insertLast(id, nama, ipk);
+      else {
+         Node n = new Node(id, nama, ipk, null);
+         Node cur = first;
+         for(int i=0; i<pos-1; i++) cur = cur.link;
+         n.link = cur.link;
+         cur.link = n;
+         size++;
+      }       
    }   
   
 /**
@@ -109,7 +126,16 @@ public class TugasKeduaINF218{
  * @param ipk : item data ipk yang diberikan.
  *********************************************************************************************/ 
    public void updateAtPos(TugasKeduaINF218 tl,int pos, int id, String nama, double ipk){
-      throw new TidakDiimplementasiException("Method updateAtPos belum diimplementasikan"); 
+      Node n = new Node(id, nama, ipk, null);
+      Node cur = tl.first;
+      int i = 0;
+      while(i < pos) {
+         cur = cur.link;
+         i++;
+      }
+      cur.id = id;
+      cur.nama = nama;
+      cur.ipk = ipk;
    }     
  
 /**
@@ -124,7 +150,13 @@ public class TugasKeduaINF218{
  * @return TugasKeduaINF218 : linked list dimana urutan node-nodenya sudah dalam urutan terbalik.
  *********************************************************************************************/     
    public static TugasKeduaINF218 reverseList(TugasKeduaINF218 tl) {
-      throw new TidakDiimplementasiException("Method reverseList belum diimplementasikan"); 
+      TugasKeduaINF218 tlReverse = new TugasKeduaINF218();
+      Node cur = tl.first;
+      while(cur != null) {
+         tlReverse.insertFirst(cur.id, cur.nama, cur.ipk);
+         cur = cur.link;
+      }
+      return tlReverse;
    }
 
 /**
@@ -141,7 +173,18 @@ public class TugasKeduaINF218{
  * @return TugasKeduaINF218 : linked list dimana urutan node-nodenya sudah dalam urutan terbalik.
  *********************************************************************************************/     
    public static TugasKeduaINF218 reverseSubList(TugasKeduaINF218 tl,int i, int j) {
-      throw new TidakDiimplementasiException("Method reverseSubList belum diimplementasikan"); 
+      TugasKeduaINF218 tlReverse = new TugasKeduaINF218();
+      Node cur = tl.first;
+      int pos = 0;
+      while(pos < i) {
+         cur = cur.link;
+         pos++;
+      }
+      for(int k=i; k<=j; k++) {
+         tlReverse.insertFirst(cur.id, cur.nama, cur.ipk);
+         cur = cur.link;
+      }
+      return tlReverse;
    }  
 
 /**
