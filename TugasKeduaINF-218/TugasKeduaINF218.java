@@ -40,15 +40,15 @@ public class TugasKeduaINF218{
  *********************************************************************************************/   
    public String [] displayList(TugasKeduaINF218 tl)
    {
-      String [] ss = new String[size];
+      String [] node = new String[size];
       int i=0;
       Node cur = tl.first;       // dimulai dari node pertama
       while(cur != null) {       // periksa apakah node sekarang null
-         ss[i]= cur.display();   // insert node ke array
+         node[i]= cur.display();   // insert node ke array
          cur = cur.link;         // berpindah ke link selanjutnya
          i++;
       }
-      return ss;                 // me-return array node di linked list
+      return node;                 // me-return array node di linked list
    }
   
 /**
@@ -61,7 +61,10 @@ public class TugasKeduaINF218{
  * @param ipk : item data ipk yang diberikan.
  *********************************************************************************************/       
    public void insertFirst(int id, String nama, double ipk){
-      throw new TidakDiimplementasiException("Method insertFirst belum diimplementasikan"); 
+         Node n = new Node(id, nama, ipk, first);
+         first = n;
+         if(last == null) last = n;
+         size++; 
    }
    
 /**
@@ -74,7 +77,11 @@ public class TugasKeduaINF218{
  * @param ipk : item data ipk yang diberikan.
  *********************************************************************************************/
    public void insertLast(int id, String nama, double ipk){
-      throw new TidakDiimplementasiException("Method insertLast belum diimplementasikan"); 
+      Node n = new Node(id, nama, ipk, null);
+      if(first == null) first = n;
+      else last.link = n;
+      last = n;
+      size++;  
    }
 
 /**
@@ -91,7 +98,17 @@ public class TugasKeduaINF218{
  *********************************************************************************************/
  
    public void insertAtPos(int id, String nama, double ipk,int pos) {
-      throw new TidakDiimplementasiException("Method insertAtPos belum diimplementasikan");    
+      if(pos < 0 || pos > size) throw new IndexOutOfBoundsException("Index out of bounds");
+      if(pos == 0) insertFirst(id, nama, ipk);
+      else if(pos == size) insertLast(id, nama, ipk);
+      else {
+         Node n = new Node(id, nama, ipk, null);
+         Node cur = first;
+         for(int i=0; i<pos-1; i++) cur = cur.link;
+         n.link = cur.link;
+         cur.link = n;
+         size++;
+      }       
    }   
   
 /**
@@ -109,7 +126,16 @@ public class TugasKeduaINF218{
  * @param ipk : item data ipk yang diberikan.
  *********************************************************************************************/ 
    public void updateAtPos(TugasKeduaINF218 tl,int pos, int id, String nama, double ipk){
-      throw new TidakDiimplementasiException("Method updateAtPos belum diimplementasikan"); 
+      Node n = new Node(id, nama, ipk, null);
+      Node cur = tl.first;
+      int i = 0;
+      while(i < pos) {
+         cur = cur.link;
+         i++;
+      }
+      cur.id = id;
+      cur.nama = nama;
+      cur.ipk = ipk;
    }     
  
 /**
@@ -124,7 +150,13 @@ public class TugasKeduaINF218{
  * @return TugasKeduaINF218 : linked list dimana urutan node-nodenya sudah dalam urutan terbalik.
  *********************************************************************************************/     
    public static TugasKeduaINF218 reverseList(TugasKeduaINF218 tl) {
-      throw new TidakDiimplementasiException("Method reverseList belum diimplementasikan"); 
+      TugasKeduaINF218 tlReverse = new TugasKeduaINF218();
+      Node cur = tl.first;
+      while(cur != null) {
+         tlReverse.insertFirst(cur.id, cur.nama, cur.ipk);
+         cur = cur.link;
+      }
+      return tlReverse;
    }
 
 /**
@@ -140,8 +172,28 @@ public class TugasKeduaINF218{
  * @param j : indeks akhir jangkauan.
  * @return TugasKeduaINF218 : linked list dimana urutan node-nodenya sudah dalam urutan terbalik.
  *********************************************************************************************/     
-   public static TugasKeduaINF218 reverseSubList(TugasKeduaINF218 tl,int i, int j) {
-      throw new TidakDiimplementasiException("Method reverseSubList belum diimplementasikan"); 
+public static TugasKeduaINF218 reverseSubList(TugasKeduaINF218 tl,int i, int j) {
+   TugasKeduaINF218 tlReverse = new TugasKeduaINF218();
+   Node cur = tl.first;
+   int pos = 0;
+   int posInsert = 0;
+   while(cur != null) {
+      if (pos < i) {
+         tlReverse.insertLast(cur.id, cur.nama, cur.ipk);
+         pos++;
+         posInsert++;
+      }
+      else if (pos <= j) {
+         tlReverse.insertAtPos(cur.id, cur.nama, cur.ipk, posInsert);
+         pos++;
+      } else {
+         tlReverse.insertLast(cur.id, cur.nama, cur.ipk);
+      }
+
+      cur = cur.link;
+   }
+      
+   return tlReverse;
    }  
 
 /**
@@ -154,7 +206,20 @@ public class TugasKeduaINF218{
  * @return int[] : array dari item data id dari node-node yang item data id dari node-nya lebih besar dari nilai d  .
  *********************************************************************************************/   
    public static int [] subListIPK(TugasKeduaINF218 tl, double d) {
-      throw new TidakDiimplementasiException("Method subListIPK belum diimplementasikan"); 
+      ArrayList<Integer> subList = new ArrayList<Integer>();
+      Node cur = tl.first;
+      while(cur != null) {
+         if (cur.ipk > d) {
+            subList.add(cur.id);
+         }
+         cur = cur.link;
+      }
+
+      int[] arrSubList = new int[subList.size()];
+      for (int i=0; i<subList.size();i++) {
+         arrSubList[i] = subList.get(i);
+      }
+      return arrSubList;
    } 
   
 /**
@@ -171,9 +236,37 @@ public class TugasKeduaINF218{
  * @return TugasKeduaINF218 : linked list dimana urutan node-nodenya sudah dalam urutan terbalik.
  *********************************************************************************************/        
    public static TugasKeduaINF218 removeSubList(TugasKeduaINF218 tl,int i, int j) {
-      throw new TidakDiimplementasiException("Method removeSubList belum diimplementasikan");    
-   }  
-
+      
+      Node cur = tl.first;
+      int pos = 0;
+      if(i == 0){
+         while(pos >= j) {
+            cur = cur.link;
+            pos++;
+            if(pos == j) {
+               tl.first = cur.link;
+            }
+            tl.size--;
+         }
+      }
+      else{
+         Node tmp = null;
+         while(cur != null){
+            pos ++;
+            if(pos == i){
+               int ltk = j;
+               while (pos <= ltk) {
+                  tmp = cur.link;
+                  cur.link = tmp.link;
+                  tl.size--;
+                  ltk--;                 
+               }
+            }
+            cur = cur.link;
+         }
+      }
+      return tl;
+   }
 /**
  * Method insertSortingListId adalah method untuk memasukkan sebuah node pada linked list terurut menurut id.
  * <br> Node yang dimasukkan memiliki item data: id, nama dan ipk.
@@ -187,7 +280,27 @@ public class TugasKeduaINF218{
  * @param ipk : item data ipk yang diberikan.
  *********************************************************************************************/ 
    public void insertSortingListId(int id, String nama, double ipk) {
-      throw new TidakDiimplementasiException("Method insertSortingListId belum diimplementasikan"); 
+      if(first == null){
+         insertFirst(id, nama, ipk);
+      }
+      else {
+         Node cur = first;
+         int pos = 0;
+         while(cur != null) {
+            if(cur.id > id) {
+               insertAtPos(id, nama, ipk, pos);
+               break;
+            }
+            else if(cur.link == null) {
+               insertLast(id, nama, ipk);
+               break;
+            }
+            else {
+               cur = cur.link;
+               pos++;
+            }
+         }
+      }
    } 
    
 /**
@@ -201,6 +314,28 @@ public class TugasKeduaINF218{
  * @return TugasKeduaINF218 : linked list dimana urutan node-nodenya sudah terurut ascending berdasarkan item data id-nya.
  *********************************************************************************************/     
    public TugasKeduaINF218 sortingListId(TugasKeduaINF218 tl) {
-      throw new TidakDiimplementasiException("Method sortingListId belum diimplementasikan"); 
-   }  
+      if(tl.first != null) {
+         Node cur = tl.first;
+         Node next = null;
+         while(cur != null) {
+            next = cur.link;
+            while(next != null) {
+               if(cur.id > next.id) {
+                  int id = cur.id;
+                  String nama = cur.nama;
+                  double ipk = cur.ipk;
+                  cur.id = next.id;
+                  cur.nama = next.nama;
+                  cur.ipk = next.ipk;
+                  next.id = id;
+                  next.nama = nama;
+                  next.ipk = ipk;
+               }
+               next = next.link;
+            }
+            cur = cur.link;
+         }
+      }
+      return tl;
+   }
 }
